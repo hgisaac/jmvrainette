@@ -1,0 +1,114 @@
+---
+name: hca
+title: Hierarchical Clustering Analysis
+menuGroup: jmvRainette
+version: '0.1.0'
+jas: '1.2'
+options:
+    - name: data
+      type: Data
+
+    - name: text
+      title: Text Corpus
+      type: Variable
+
+    - name: segsize
+      title: Segments Size
+      type: Integer
+      default: 40
+
+    - name: tolower
+      title: Convert to Lower Charecters
+      type: Bool
+      default: true
+    
+    - name: stopwords
+      title: Stop Words Language
+      type: List
+      options:
+        - title: English
+          name: english
+        - title: Portuguese
+          name: portuguese
+      default: english
+
+    - name: rmvpunct
+      title: Remove Punctuation
+      type: Bool
+      default: true
+
+    - name: lang
+      title: Language
+      type: List
+      options:
+        - title: English
+          name: english
+        - title: Portuguese
+          name: portugues
+      default: english
+
+    - name: mintermfreq
+      title: Minimum Term Frequencie
+      type: Integer
+      default: 3
+
+    - name: kmeans
+      title: K Means
+      type: Integer
+      default: 6
+      
+    - name: minucsize
+      title: Minimum UC size
+      type: Integer
+      default: 10
+
+    - name: minsplit
+      title: Minimum Split Members
+      type: Integer
+      default: 20
+
+    - name: kgroup
+      title: K Group
+      type: Integer
+      default: 5
+    
+    - name: plottype
+      title: Plot Type
+      type: List
+      options:
+        - title: Bar
+          name: bar
+        - title: Cloud
+          name: cloud
+      default: bar
+    
+    - name: nterms
+      title: N Terms
+      type: Integer
+      default: 20
+    
+    - name: freescales
+      title: Free Scales
+      type: Bool
+      default: false
+    
+    - name: measure
+      title: Statistic Measure
+      type: List
+      options:
+        - title: Chi2
+          name: chi2
+        - title: LR
+          name: lr
+      default: chi2
+    
+    - name: negative
+      title: Show Negative
+      type: Bool
+      default: true
+    
+    - name: textsize
+      title: Text Size
+      type: Integer
+      default: 12
+...
