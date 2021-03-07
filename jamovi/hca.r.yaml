@@ -1,0 +1,12 @@
+---
+name:  hca
+title: Hierarchical Clustering Analysis
+jrs:   '1.1'
+items:
+  - name: plot
+    title: HCA Plot
+    type: Image
+    width: 600
+    height: 700
+    renderFun: .plot
+...
