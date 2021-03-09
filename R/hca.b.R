@@ -15,11 +15,12 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             corpus <- quanteda::corpus(data, text_field=self$options$text)
             corpus <- rainette::split_segments(corpus, segment_size=self$options$segsize)
 
-            load(paste0('stopwords/', self$options$stopwords, '.Rdata'))
+            stpwd_lang <- paste0(self$options$stopwords, '_stopwords')
+            stpwd_expression <- parse(text=paste0('jmvrainette::', stpwd_lang))
 
             dtm <- quanteda::dfm(
                 corpus,
-                remove=stops, # TODO: stopwords::stopwords(self$options$stopwords),
+                remove=eval(stpwd_expression), # TODO: stopwords::stopwords(self$options$stopwords),
                 tolower=self$options$tolower,
                 remove_punct=self$options$rmvpunct
             )

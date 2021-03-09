@@ -22,7 +22,7 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             freescales = FALSE,
             measure = "chi2",
             negative = TRUE,
-            textsize = 10, ...) {
+            textsize = 12, ...) {
 
             super$initialize(
                 package='jmvrainette',
@@ -108,7 +108,7 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             private$..textsize <- jmvcore::OptionInteger$new(
                 "textsize",
                 textsize,
-                default=10)
+                default=12)
 
             self$.addOption(private$..text)
             self$.addOption(private$..segsize)
@@ -250,7 +250,7 @@ hca <- function(
     freescales = FALSE,
     measure = "chi2",
     negative = TRUE,
-    textsize = 10) {
+    textsize = 12) {
 
     if ( ! requireNamespace('jmvcore', quietly=TRUE))
         stop('hca requires jmvcore to be installed (restart may be required)')
