@@ -4,7 +4,6 @@
 
 # Session Data files
 *.RData
-*.Rdata
 
 # User-specific files
 .Ruserdata
@@ -64,4 +63,3 @@ npm-debug.log
 inst/doc
 tests/testthat/Rplots.pdf
 *.ods
-inaugural
