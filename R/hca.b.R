@@ -5,8 +5,12 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     inherit = hcaBase,
     private = list(
         .run = function() {
+            if (length(self$options$text) == 0) {
+                return()
+            }
+            
             data <- self$data
-            row.names(data) <- paste0('row', 1:nrow(data))
+            row.names(data) <- paste0('row', seq_len(nrow(data)))
 
             data[[self$options$text]] <- as.character(
                 data[[self$options$text]]
@@ -20,43 +24,63 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
             dtm <- quanteda::dfm(
                 corpus,
-                remove=eval(stpwd_expression), # TODO: stopwords::stopwords(self$options$stopwords),
+                remove=eval(stpwd_expression),
                 tolower=self$options$tolower,
                 remove_punct=self$options$rmvpunct
             )
             dtm <- quanteda::dfm_wordstem(dtm, language=self$options$lang)
             dtm <- quanteda::dfm_trim(dtm, min_termfreq=self$options$mintermfreq)
             
-            results <- rainette::rainette(
-                dtm,
-                k=self$options$kmeans,
-                min_uc_size=self$options$minucsize,
-                min_split_members=self$options$minsplit
-            )
+            tryCatch({
+                results <- rainette::rainette(
+                    dtm,
+                    k=self$options$kmeans,
+                    min_uc_size=self$options$minucsize,
+                    min_split_members=self$options$minsplit
+                )
 
-            plotData <- list(results, dtm)
-            names(plotData) <- c('result', 'dtm')
+                plotData <- list(results, dtm)
+                names(plotData) <- c('result', 'dtm')
 
-            image <- self$results$plot
-            image$setState(plotData)
+                image <- self$results$plot
+                image$setState(plotData)
+            },
+            error = function(e) {
+                stop(paste(
+                    'Analysis results the error:', geterrmessage(),
+                    '. Try to adjust the parameters.'
+                ))
+            })
         },
         .plot = function(image, ...) {
+            if (length(self$options$text) == 0) {
+                return()
+            }
+
             plotData <- image$state
 
-            plot <- rainette::rainette_plot(
-                plotData$result,
-                plotData$dtm,
-                k=self$options$kgroup,
-                type=self$options$plottype,
-                n_terms=self$options$nterms,
-                free_scales=self$options$freescales,
-                measure=self$options$measure,
-                show_negative=self$options$negative,
-                text_size=self$options$textsize
-            )
+            tryCatch({
+                plot <- rainette::rainette_plot(
+                    plotData$result,
+                    plotData$dtm,
+                    k=self$options$kgroup,
+                    type=self$options$plottype,
+                    n_terms=self$options$nterms,
+                    free_scales=self$options$freescales,
+                    measure=self$options$measure,
+                    show_negative=self$options$negative,
+                    text_size=self$options$textsize
+                )
 
-            print(plot)
-            TRUE
+                print(plot)
+                TRUE
+            },
+            error = function(e) {
+                stop(paste(
+                    'Plot results the error:', geterrmessage(),
+                    '. Try to adjust the parameters.'
+                ))
+            })
         }
     )
 )
