@@ -7,6 +7,6 @@ items:
     title: HCA Plot
     type: Image
     width: 600
-    height: 700
+    height: 650
     renderFun: .plot
 ...
