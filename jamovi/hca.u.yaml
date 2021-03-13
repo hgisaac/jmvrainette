@@ -2,7 +2,7 @@ title: Hierarchical Clustering Analysis
 name: hca
 jus: '3.0'
 stage: 0
-compilerMode: aggressive
+compilerMode: tame
 children:
   - type: VariableSupplier
     persistentItems: false
@@ -15,91 +15,72 @@ children:
             name: text
             maxItemCount: 1
             isTarget: true
-  - type: LayoutBox
+  - type: CollapseBox
+    collapsed: true
+    label: Analysis
     margin: large
     children:
-      - type: TextBox
-        name: segsize
-        format: number
-  - type: LayoutBox
+      - type: Label
+        label: Clustering
+        children:
+          - type: TextBox
+            name: kmeans
+            format: number
+          - type: TextBox
+            name: minucsize
+            format: number
+          - type: TextBox
+            name: minsplit
+            format: number
+      - type: Label
+        label: Words Matrix
+        cell:
+          column: 1
+          row: 0
+        children:
+          - type: ComboBox
+            name: lang
+          - type: TextBox
+            name: mintermfreq
+            format: number
+          - type: CheckBox
+            name: tolower
+          - type: CheckBox
+            name: rmvpunct
+      - type: Label
+        label: Corpus
+        children:
+          - type: TextBox
+            name: segsize
+            format: number
+  - type: CollapseBox
+    collapsed: true
+    label: Plot
     margin: large
     children:
-      - type: CheckBox
-        name: tolower
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: ComboBox
-        name: stopwords
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: CheckBox
-        name: rmvpunct
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: ComboBox
-        name: lang
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: mintermfreq
-        format: number
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: kmeans
-        format: number
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: minucsize
-        format: number
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: minsplit
-        format: number
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: kgroup
-        format: number
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: ComboBox
-        name: plottype
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: nterms
-        format: number
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: CheckBox
-        name: freescales
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: ComboBox
-        name: measure
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: CheckBox
-        name: negative
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: TextBox
-        name: textsize
-        format: number
+      - type: Label
+        label: Cluster Config
+        children:
+          - type: TextBox
+            name: kgroup
+            format: number
+          - type: ComboBox
+            name: measure
+          - type: CheckBox
+            name: freescales
+      - type: Label
+        label: Visual
+        cell:
+          column: 1
+          row: 0
+        children:
+          - type: ComboBox
+            name: plottype
+          - type: TextBox
+            name: nterms
+            format: number
+          - type: TextBox
+            name: textsize
+            format: number
+          - type: CheckBox
+            name: negative
