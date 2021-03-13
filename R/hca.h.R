@@ -9,7 +9,6 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             text = NULL,
             segsize = 40,
             tolower = TRUE,
-            stopwords = "english",
             rmvpunct = TRUE,
             lang = "english",
             mintermfreq = 3,
@@ -41,13 +40,6 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 "tolower",
                 tolower,
                 default=TRUE)
-            private$..stopwords <- jmvcore::OptionList$new(
-                "stopwords",
-                stopwords,
-                options=list(
-                    "english",
-                    "portuguese"),
-                default="english")
             private$..rmvpunct <- jmvcore::OptionBool$new(
                 "rmvpunct",
                 rmvpunct,
@@ -113,7 +105,6 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..text)
             self$.addOption(private$..segsize)
             self$.addOption(private$..tolower)
-            self$.addOption(private$..stopwords)
             self$.addOption(private$..rmvpunct)
             self$.addOption(private$..lang)
             self$.addOption(private$..mintermfreq)
@@ -132,7 +123,6 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         text = function() private$..text$value,
         segsize = function() private$..segsize$value,
         tolower = function() private$..tolower$value,
-        stopwords = function() private$..stopwords$value,
         rmvpunct = function() private$..rmvpunct$value,
         lang = function() private$..lang$value,
         mintermfreq = function() private$..mintermfreq$value,
@@ -150,7 +140,6 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         ..text = NA,
         ..segsize = NA,
         ..tolower = NA,
-        ..stopwords = NA,
         ..rmvpunct = NA,
         ..lang = NA,
         ..mintermfreq = NA,
@@ -182,7 +171,7 @@ hcaResults <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 name="plot",
                 title="HCA Plot",
                 width=600,
-                height=700,
+                height=650,
                 renderFun=".plot"))}))
 
 hcaBase <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
@@ -212,7 +201,6 @@ hcaBase <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 #' @param text .
 #' @param segsize .
 #' @param tolower .
-#' @param stopwords .
 #' @param rmvpunct .
 #' @param lang .
 #' @param mintermfreq .
@@ -237,7 +225,6 @@ hca <- function(
     text,
     segsize = 40,
     tolower = TRUE,
-    stopwords = "english",
     rmvpunct = TRUE,
     lang = "english",
     mintermfreq = 3,
@@ -266,7 +253,6 @@ hca <- function(
         text = text,
         segsize = segsize,
         tolower = tolower,
-        stopwords = stopwords,
         rmvpunct = rmvpunct,
         lang = lang,
         mintermfreq = mintermfreq,
