@@ -1,7 +1,7 @@
 Package: jmvrainette
 Type: Package
 Title: Rainette analysis made available in jamovi
-Version: 0.1.2
+Version: 0.2.0
 Author: Hugo Isaac Alves Romero
 Maintainer: Hugo Isaac Alves Romero <hugo_iar@live.com>
 Description: A jamovi module which provides analysis from rainette package
