@@ -18,19 +18,9 @@ options:
       default: 40
 
     - name: tolower
-      title: Convert to Lower Charecters
+      title: Convert Characters to Lower
       type: Bool
       default: true
-    
-    - name: stopwords
-      title: Stop Words Language
-      type: List
-      options:
-        - title: English
-          name: english
-        - title: Portuguese
-          name: portuguese
-      default: english
 
     - name: rmvpunct
       title: Remove Punctuation
@@ -53,7 +43,7 @@ options:
       default: 3
 
     - name: kmeans
-      title: K Means
+      title: Maximum Number of Clusters
       type: Integer
       default: 6
       
@@ -68,7 +58,7 @@ options:
       default: 20
 
     - name: kgroup
-      title: K Group
+      title: Number of Groups (k)
       type: Integer
       default: 5
     
@@ -83,7 +73,7 @@ options:
       default: bar
     
     - name: nterms
-      title: N Terms
+      title: Number of Terms to Display
       type: Integer
       default: 20
     
