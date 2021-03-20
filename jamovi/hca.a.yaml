@@ -101,4 +101,9 @@ options:
       title: Text Size
       type: Integer
       default: 12
+    
+    - name: showstats
+      title: Show Tables
+      type: Bool
+      default: false
 ...

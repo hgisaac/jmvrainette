@@ -84,3 +84,8 @@ children:
             format: number
           - type: CheckBox
             name: negative
+      - type: Label
+        label: Statistics Tables
+        children:
+          - type: CheckBox
+            name: showstats
