@@ -81,6 +81,53 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     '. Try to adjust the parameters.'
                 ))
             })
+
+            if (self$options$showstats) {
+                private$.stats(plotData$result, plotData$dtm)
+            }
+        },
+        .stats = function(results, dtm) {
+            groups <- rainette::cutree_rainette(results, k=self$options$kgroup)
+            stats <- rainette::rainette_stats(
+                groups,
+                dtm,
+                measure=self$options$measure,
+                n_terms=self$options$nterms,
+                show_negative=self$options$negative
+            )
+
+            for (statsIndex in seq_len(length(stats))) {
+                table <- jmvcore::Table$new(
+                    self$options,
+                    paste0('table', statsIndex),
+                    paste('Cluster', statsIndex),
+                    columns=list(
+                        list(name='feature', title='Feature', type='text'),
+                        list(name='chi2', title='Chi2', type='number'),
+                        list(name='p', type='number', format='zto,pvalue'),
+                        list(name='n_target', title='Number Target', type='integer'),
+                        list(name='n_reference', title='Number Reference', type='integer'),
+                        list(name='sign', title='Sign', type='text')
+                    )
+                )
+
+                dataFrame <- stats[[statsIndex]]
+                for (rowIndex in seq_len(nrow(dataFrame))) {
+                    table$addRow(
+                        rowIndex,
+                        list(
+                            feature=dataFrame[rowIndex, ]$feature,
+                            chi2=dataFrame[rowIndex, ]$chi2,
+                            p=dataFrame[rowIndex, ]$p,
+                            n_target=dataFrame[rowIndex, ]$n_target,
+                            n_reference=dataFrame[rowIndex, ]$n_reference,
+                            sign=dataFrame[rowIndex, ]$sign
+                        )
+                    )
+                }
+
+                self$results$add(table)
+            }
         }
     )
 )

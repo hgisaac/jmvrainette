@@ -21,7 +21,8 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             freescales = FALSE,
             measure = "chi2",
             negative = TRUE,
-            textsize = 12, ...) {
+            textsize = 12,
+            showstats = FALSE, ...) {
 
             super$initialize(
                 package='jmvrainette',
@@ -101,6 +102,10 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 "textsize",
                 textsize,
                 default=12)
+            private$..showstats <- jmvcore::OptionBool$new(
+                "showstats",
+                showstats,
+                default=FALSE)
 
             self$.addOption(private$..text)
             self$.addOption(private$..segsize)
@@ -118,6 +123,7 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..measure)
             self$.addOption(private$..negative)
             self$.addOption(private$..textsize)
+            self$.addOption(private$..showstats)
         }),
     active = list(
         text = function() private$..text$value,
@@ -135,7 +141,8 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         freescales = function() private$..freescales$value,
         measure = function() private$..measure$value,
         negative = function() private$..negative$value,
-        textsize = function() private$..textsize$value),
+        textsize = function() private$..textsize$value,
+        showstats = function() private$..showstats$value),
     private = list(
         ..text = NA,
         ..segsize = NA,
@@ -152,7 +159,8 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         ..freescales = NA,
         ..measure = NA,
         ..negative = NA,
-        ..textsize = NA)
+        ..textsize = NA,
+        ..showstats = NA)
 )
 
 hcaResults <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
@@ -214,6 +222,7 @@ hcaBase <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 #' @param measure .
 #' @param negative .
 #' @param textsize .
+#' @param showstats .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
@@ -237,7 +246,8 @@ hca <- function(
     freescales = FALSE,
     measure = "chi2",
     negative = TRUE,
-    textsize = 12) {
+    textsize = 12,
+    showstats = FALSE) {
 
     if ( ! requireNamespace('jmvcore', quietly=TRUE))
         stop('hca requires jmvcore to be installed (restart may be required)')
@@ -265,7 +275,8 @@ hca <- function(
         freescales = freescales,
         measure = measure,
         negative = negative,
-        textsize = textsize)
+        textsize = textsize,
+        showstats = showstats)
 
     analysis <- hcaClass$new(
         options = options,
