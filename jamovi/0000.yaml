@@ -17,4 +17,5 @@ analyses:
     menuTitle: Hierarchical Clustering Analysis
 usesNative: true
 minApp: 1.0.8
+
 ...

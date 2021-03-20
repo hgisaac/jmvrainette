@@ -59,6 +59,10 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
             plotData <- image$state
 
+            if (self$options$showstats) {
+                private$.stats(plotData$result, plotData$dtm)
+            }
+
             tryCatch({
                 plot <- rainette::rainette_plot(
                     plotData$result,
@@ -81,10 +85,6 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     '. Try to adjust the parameters.'
                 ))
             })
-
-            if (self$options$showstats) {
-                private$.stats(plotData$result, plotData$dtm)
-            }
         },
         .stats = function(results, dtm) {
             groups <- rainette::cutree_rainette(results, k=self$options$kgroup)
