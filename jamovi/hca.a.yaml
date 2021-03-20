@@ -2,7 +2,7 @@
 name: hca
 title: Hierarchical Clustering Analysis
 menuGroup: jmvRainette
-version: '0.1.0'
+version: '0.3.0'
 jas: '1.2'
 options:
     - name: data

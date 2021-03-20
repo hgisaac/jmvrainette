@@ -1,14 +1,14 @@
 ---
 title: jmvRainette
 name: jmvrainette
-version: 0.2.0
+version: 0.3.0
 jms: '1.0'
 authors:
   - Hugo Isaac
 maintainer: Hugo Isaac <hugo_iar@live.com>
-date: '2021-03-07'
+date: '2021-03-20'
 type: R
-description: A jamovi module which provides analysis from rainette package
+description: A jamovi module which provides analysis from rainette package.
 analyses:
   - title: Hierarchical Clustering Analysis
     name: hca
@@ -17,5 +17,4 @@ analyses:
     menuTitle: Hierarchical Clustering Analysis
 usesNative: true
 minApp: 1.0.8
-
 ...
