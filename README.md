@@ -1,25 +1,24 @@
 # jmvrainette
 **EN**
 
-A jamovi module which provides the hierarchical text clustering analysis from [rainette](https://github.com/juba/rainette) package.
+A jamovi module which provides the hierarchical text clustering analysis from [rainette](https://github.com/juba/rainette) package. Currently, the module supports portuguese and english idioms.
 
-It is possible to adjust the analysis parameters throughout the options in graphical interface.
-
-The analysis results is plotted in a [dendrogram](https://en.wikipedia.org/wiki/Dendrogram), which also could be customized throughout interface.
-
-Currently, the module only have the simple clustering analysis and supports portuguese and english idioms. Later, it will be added the double clustering available in rainette package.
+It is possible to adjust the analysis parameters throughout the options in graphical interface. The analysis results is plotted in a [dendrogram](https://en.wikipedia.org/wiki/Dendrogram), which also could be customized throughout interface. Moreover, it is possible to visualize the detailed statistics of each cluster in table format.
 
 **PT-BR**
 
-Um módulo para jamovi que disponibiliza a análise de clusterização hierárquica de textos do pacote [rainette](https://github.com/juba/rainette).
+Um módulo para jamovi que disponibiliza a análise de clusterização hierárquica de textos do pacote [rainette](https://github.com/juba/rainette). Atualmente, o módulo suporta os idiomas português e inglês.
 
-É possível ajustar os parâmetros da análise através das opções na interface gráfica.
+É possível ajustar os parâmetros da análise através das opções na interface gráfica. Os resultados da análise são plotados em um [dendrograma](https://pt.wikipedia.org/wiki/Dendrograma), que também pode ser personalizado através da interface. Além disso, é possível visualizar as estatísticas detalhadas de cada cluster em formato de tabela.
 
-Os resultados da análise são plotados em um [dendrograma](https://pt.wikipedia.org/wiki/Dendrograma), que também pode ser personalizado através da interface.
+## Screenshots
+![analysis-options](./images/analysis-options.png)
 
-Atualmente, o módulo contém apenas a análise de clusterização simples e suporta os idiomas português e inglês. Posteriormente, será adicionada a clusterização dupla disponível no pacote rainette.
+![plot-options](./images/plot-options.png)
 
-![screenshot](./images/screenshot.png)
+![simple-clustering](./images/simple-clustering.png)
+
+![double-clustering](./images/double-clustering.png)
 
 # Installation
 **EN**
