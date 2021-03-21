@@ -33,6 +33,18 @@ children:
             name: minsplit
             format: number
       - type: Label
+        label: Double Clustering
+        children:
+          - type: CheckBox
+            name: doublecluster
+          - type: TextBox
+            name: minucsize2
+            format: number
+          - type: ComboBox
+            name: partcriterion
+          - type: CheckBox
+            name: completegroups
+      - type: Label
         label: Words Matrix
         cell:
           column: 1
@@ -48,15 +60,10 @@ children:
           - type: CheckBox
             name: rmvpunct
       - type: Label
-        label: Double Clustering
-        children:
-          - type: CheckBox
-            name: doublecluster
-          - type: TextBox
-            name: minucsize2
-            format: number
-      - type: Label
         label: Corpus
+        cell:
+          column: 1
+          row: 1
         children:
           - type: TextBox
             name: segsize
@@ -76,8 +83,6 @@ children:
             name: measure
           - type: CheckBox
             name: freescales
-          - type: CheckBox
-            name: completegroups
       - type: Label
         label: Visual
         cell:
@@ -99,8 +104,3 @@ children:
         children:
           - type: CheckBox
             name: showstats
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: ComboBox
-        name: partcriterion
