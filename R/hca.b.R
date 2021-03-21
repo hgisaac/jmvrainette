@@ -32,12 +32,22 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             dtm <- quanteda::dfm_trim(dtm, min_termfreq=self$options$mintermfreq)
             
             tryCatch({
-                results <- rainette::rainette(
-                    dtm,
-                    k=self$options$kmeans,
-                    min_uc_size=self$options$minucsize,
-                    min_split_members=self$options$minsplit
-                )
+                if (!self$options$doublecluster) {
+                    results <- rainette::rainette(
+                        dtm,
+                        k=self$options$kmeans,
+                        min_uc_size=self$options$minucsize,
+                        min_split_members=self$options$minsplit
+                    )
+                } else {
+                    results <- rainette::rainette2(
+                        dtm,
+                        uc_size1=self$options$minucsize,
+                        uc_size2=self$options$minucsize2,
+                        max_k=self$options$kmeans,
+                        min_members=self$options$minsplit
+                    )
+                }
 
                 plotData <- list(results, dtm)
                 names(plotData) <- c('result', 'dtm')
@@ -64,17 +74,33 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             }
 
             tryCatch({
-                plot <- rainette::rainette_plot(
-                    plotData$result,
-                    plotData$dtm,
-                    k=self$options$kgroup,
-                    type=self$options$plottype,
-                    n_terms=self$options$nterms,
-                    free_scales=self$options$freescales,
-                    measure=self$options$measure,
-                    show_negative=self$options$negative,
-                    text_size=self$options$textsize
-                )
+                if (!self$options$doublecluster) {
+                    plot <- rainette::rainette_plot(
+                        plotData$result,
+                        plotData$dtm,
+                        k=self$options$kgroup,
+                        type=self$options$plottype,
+                        n_terms=self$options$nterms,
+                        free_scales=self$options$freescales,
+                        measure=self$options$measure,
+                        show_negative=self$options$negative,
+                        text_size=self$options$textsize
+                    )
+                } else {
+                    plot <- rainette::rainette2_plot(
+                        plotData$result,
+                        plotData$dtm,
+                        k=self$options$kgroup,
+                        criterion=self$options$partcriterion,
+                        complete_groups=self$options$completegroups,
+                        type=self$options$plottype,
+                        n_terms=self$options$nterms,
+                        free_scales=self$options$freescales,
+                        measure=self$options$measure,
+                        show_negative=self$options$negative,
+                        text_size=self$options$textsize
+                    )
+                }
 
                 print(plot)
                 TRUE
@@ -87,7 +113,20 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             })
         },
         .stats = function(results, dtm) {
-            groups <- rainette::cutree_rainette(results, k=self$options$kgroup)
+            if (!self$options$doublecluster) {
+                groups <- rainette::cutree_rainette(results, k=self$options$kgroup)
+            } else {
+                groups <- rainette::cutree_rainette2(
+                    results,
+                    k=self$options$kgroup,
+                    criterion=self$options$partcriterion
+                )
+
+                if (self$options$completegroups) {
+                    groups <- rainette::rainette2_complete_groups(dtm, groups)
+                }
+            }
+
             stats <- rainette::rainette_stats(
                 groups,
                 dtm,
