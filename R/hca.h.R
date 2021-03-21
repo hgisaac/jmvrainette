@@ -212,7 +212,7 @@ hcaResults <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
-                title="HCA Plot",
+                title="Plot",
                 width=600,
                 height=650,
                 renderFun=".plot"))}))

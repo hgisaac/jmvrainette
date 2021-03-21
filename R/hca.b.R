@@ -17,7 +17,10 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             )
 
             corpus <- quanteda::corpus(data, text_field=self$options$text)
-            corpus <- rainette::split_segments(corpus, segment_size=self$options$segsize)
+            corpus <- rainette::split_segments(
+                corpus,
+                segment_size=self$options$segsize
+            )
 
             stpwd_lang <- paste0(self$options$lang, '_stopwords')
             stpwd_expression <- parse(text=paste0('jmvrainette::', stpwd_lang))
@@ -31,15 +34,15 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             dtm <- quanteda::dfm_wordstem(dtm, language=self$options$lang)
             dtm <- quanteda::dfm_trim(dtm, min_termfreq=self$options$mintermfreq)
             
-            tryCatch({
-                if (!self$options$doublecluster) {
-                    results <- rainette::rainette(
-                        dtm,
-                        k=self$options$kmeans,
-                        min_uc_size=self$options$minucsize,
-                        min_split_members=self$options$minsplit
-                    )
-                } else {
+            if (!self$options$doublecluster) {
+                results <- rainette::rainette(
+                    dtm,
+                    k=self$options$kmeans,
+                    min_uc_size=self$options$minucsize,
+                    min_split_members=self$options$minsplit
+                )
+            } else {
+                tryCatch({
                     results <- rainette::rainette2(
                         dtm,
                         uc_size1=self$options$minucsize,
@@ -47,20 +50,19 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                         max_k=self$options$kmeans,
                         min_members=self$options$minsplit
                     )
-                }
+                },
+                error = function(e) {
+                    warning('Double clustering returned the error: ',
+                        geterrmessage())
+                    results <- NULL
+                })
+            }
 
-                plotData <- list(results, dtm)
-                names(plotData) <- c('result', 'dtm')
+            plotData <- list(results, dtm)
+            names(plotData) <- c('results', 'dtm')
 
-                image <- self$results$plot
-                image$setState(plotData)
-            },
-            error = function(e) {
-                stop(paste(
-                    'Analysis results the error:', geterrmessage(),
-                    '. Try to adjust the parameters.'
-                ))
-            })
+            image <- self$results$plot
+            image$setState(plotData)
         },
         .plot = function(image, ...) {
             if (length(self$options$text) == 0) {
@@ -69,14 +71,15 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
             plotData <- image$state
 
-            if (self$options$showstats) {
-                private$.stats(plotData$result, plotData$dtm)
+            if (is.null(plotData$results)) {
+                stop('Analysis returned NULL results. ',
+                    'Try to adjust the parameters or the corpus.')
             }
 
             tryCatch({
                 if (!self$options$doublecluster) {
                     plot <- rainette::rainette_plot(
-                        plotData$result,
+                        plotData$results,
                         plotData$dtm,
                         k=self$options$kgroup,
                         type=self$options$plottype,
@@ -88,7 +91,7 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     )
                 } else {
                     plot <- rainette::rainette2_plot(
-                        plotData$result,
+                        plotData$results,
                         plotData$dtm,
                         k=self$options$kgroup,
                         criterion=self$options$partcriterion,
@@ -101,16 +104,18 @@ hcaClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                         text_size=self$options$textsize
                     )
                 }
-
-                print(plot)
-                TRUE
             },
             error = function(e) {
-                stop(paste(
-                    'Plot results the error:', geterrmessage(),
-                    '. Try to adjust the parameters.'
-                ))
+                stop('Plot returned the error: ', geterrmessage(),
+                    '. Try to adjust the parameters.')
             })
+
+            if (self$options$showstats) {
+                private$.stats(plotData$results, plotData$dtm)
+            }
+
+            print(plot)
+            TRUE
         },
         .stats = function(results, dtm) {
             if (!self$options$doublecluster) {
