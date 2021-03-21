@@ -7,6 +7,7 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             text = NULL,
+            doublecluster = FALSE,
             segsize = 40,
             tolower = TRUE,
             rmvpunct = TRUE,
@@ -14,12 +15,15 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             mintermfreq = 3,
             kmeans = 6,
             minucsize = 10,
+            minucsize2 = 15,
             minsplit = 20,
             kgroup = 5,
+            completegroups = FALSE,
             plottype = "bar",
             nterms = 20,
             freescales = FALSE,
             measure = "chi2",
+            partcriterion = "chi2",
             negative = TRUE,
             textsize = 12,
             showstats = FALSE, ...) {
@@ -33,6 +37,10 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             private$..text <- jmvcore::OptionVariable$new(
                 "text",
                 text)
+            private$..doublecluster <- jmvcore::OptionBool$new(
+                "doublecluster",
+                doublecluster,
+                default=FALSE)
             private$..segsize <- jmvcore::OptionInteger$new(
                 "segsize",
                 segsize,
@@ -64,6 +72,10 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 "minucsize",
                 minucsize,
                 default=10)
+            private$..minucsize2 <- jmvcore::OptionInteger$new(
+                "minucsize2",
+                minucsize2,
+                default=15)
             private$..minsplit <- jmvcore::OptionInteger$new(
                 "minsplit",
                 minsplit,
@@ -72,6 +84,10 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 "kgroup",
                 kgroup,
                 default=5)
+            private$..completegroups <- jmvcore::OptionBool$new(
+                "completegroups",
+                completegroups,
+                default=FALSE)
             private$..plottype <- jmvcore::OptionList$new(
                 "plottype",
                 plottype,
@@ -94,6 +110,13 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                     "chi2",
                     "lr"),
                 default="chi2")
+            private$..partcriterion <- jmvcore::OptionList$new(
+                "partcriterion",
+                partcriterion,
+                options=list(
+                    "chi2",
+                    "n"),
+                default="chi2")
             private$..negative <- jmvcore::OptionBool$new(
                 "negative",
                 negative,
@@ -108,6 +131,7 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                 default=FALSE)
 
             self$.addOption(private$..text)
+            self$.addOption(private$..doublecluster)
             self$.addOption(private$..segsize)
             self$.addOption(private$..tolower)
             self$.addOption(private$..rmvpunct)
@@ -115,18 +139,22 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..mintermfreq)
             self$.addOption(private$..kmeans)
             self$.addOption(private$..minucsize)
+            self$.addOption(private$..minucsize2)
             self$.addOption(private$..minsplit)
             self$.addOption(private$..kgroup)
+            self$.addOption(private$..completegroups)
             self$.addOption(private$..plottype)
             self$.addOption(private$..nterms)
             self$.addOption(private$..freescales)
             self$.addOption(private$..measure)
+            self$.addOption(private$..partcriterion)
             self$.addOption(private$..negative)
             self$.addOption(private$..textsize)
             self$.addOption(private$..showstats)
         }),
     active = list(
         text = function() private$..text$value,
+        doublecluster = function() private$..doublecluster$value,
         segsize = function() private$..segsize$value,
         tolower = function() private$..tolower$value,
         rmvpunct = function() private$..rmvpunct$value,
@@ -134,17 +162,21 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         mintermfreq = function() private$..mintermfreq$value,
         kmeans = function() private$..kmeans$value,
         minucsize = function() private$..minucsize$value,
+        minucsize2 = function() private$..minucsize2$value,
         minsplit = function() private$..minsplit$value,
         kgroup = function() private$..kgroup$value,
+        completegroups = function() private$..completegroups$value,
         plottype = function() private$..plottype$value,
         nterms = function() private$..nterms$value,
         freescales = function() private$..freescales$value,
         measure = function() private$..measure$value,
+        partcriterion = function() private$..partcriterion$value,
         negative = function() private$..negative$value,
         textsize = function() private$..textsize$value,
         showstats = function() private$..showstats$value),
     private = list(
         ..text = NA,
+        ..doublecluster = NA,
         ..segsize = NA,
         ..tolower = NA,
         ..rmvpunct = NA,
@@ -152,12 +184,15 @@ hcaOptions <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         ..mintermfreq = NA,
         ..kmeans = NA,
         ..minucsize = NA,
+        ..minucsize2 = NA,
         ..minsplit = NA,
         ..kgroup = NA,
+        ..completegroups = NA,
         ..plottype = NA,
         ..nterms = NA,
         ..freescales = NA,
         ..measure = NA,
+        ..partcriterion = NA,
         ..negative = NA,
         ..textsize = NA,
         ..showstats = NA)
@@ -207,6 +242,7 @@ hcaBase <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 #' 
 #' @param data .
 #' @param text .
+#' @param doublecluster .
 #' @param segsize .
 #' @param tolower .
 #' @param rmvpunct .
@@ -214,12 +250,15 @@ hcaBase <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 #' @param mintermfreq .
 #' @param kmeans .
 #' @param minucsize .
+#' @param minucsize2 .
 #' @param minsplit .
 #' @param kgroup .
+#' @param completegroups .
 #' @param plottype .
 #' @param nterms .
 #' @param freescales .
 #' @param measure .
+#' @param partcriterion .
 #' @param negative .
 #' @param textsize .
 #' @param showstats .
@@ -232,6 +271,7 @@ hcaBase <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 hca <- function(
     data,
     text,
+    doublecluster = FALSE,
     segsize = 40,
     tolower = TRUE,
     rmvpunct = TRUE,
@@ -239,12 +279,15 @@ hca <- function(
     mintermfreq = 3,
     kmeans = 6,
     minucsize = 10,
+    minucsize2 = 15,
     minsplit = 20,
     kgroup = 5,
+    completegroups = FALSE,
     plottype = "bar",
     nterms = 20,
     freescales = FALSE,
     measure = "chi2",
+    partcriterion = "chi2",
     negative = TRUE,
     textsize = 12,
     showstats = FALSE) {
@@ -261,6 +304,7 @@ hca <- function(
 
     options <- hcaOptions$new(
         text = text,
+        doublecluster = doublecluster,
         segsize = segsize,
         tolower = tolower,
         rmvpunct = rmvpunct,
@@ -268,12 +312,15 @@ hca <- function(
         mintermfreq = mintermfreq,
         kmeans = kmeans,
         minucsize = minucsize,
+        minucsize2 = minucsize2,
         minsplit = minsplit,
         kgroup = kgroup,
+        completegroups = completegroups,
         plottype = plottype,
         nterms = nterms,
         freescales = freescales,
         measure = measure,
+        partcriterion = partcriterion,
         negative = negative,
         textsize = textsize,
         showstats = showstats)

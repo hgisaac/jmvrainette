@@ -12,6 +12,11 @@ options:
       title: Text Corpus
       type: Variable
 
+    - name: doublecluster
+      title: Compute Double Clustering
+      type: Bool
+      default: false
+
     - name: segsize
       title: Segments Size
       type: Integer
@@ -52,6 +57,11 @@ options:
       type: Integer
       default: 10
 
+    - name: minucsize2
+      title: 2º Minimum UC size
+      type: Integer
+      default: 15
+    
     - name: minsplit
       title: Minimum Split Members
       type: Integer
@@ -61,6 +71,11 @@ options:
       title: Number of Groups (k)
       type: Integer
       default: 5
+    
+    - name: completegroups
+      title: Fill NA with Neighbours
+      type: Bool
+      default: false
     
     - name: plottype
       title: Plot Type
@@ -90,6 +105,16 @@ options:
           name: chi2
         - title: LR
           name: lr
+      default: chi2
+    
+    - name: partcriterion
+      title: Partition Criterion
+      type: List
+      options:
+        - title: Chi2
+          name: chi2
+        - title: Maximum Size
+          name: "n"
       default: chi2
     
     - name: negative
